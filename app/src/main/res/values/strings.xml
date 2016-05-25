@@ -5,4 +5,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+
+    <string-array name="default_colors">
+        <item>#4079ff </item>
+        <item>#ffe940 </item>
+        <item>#ffb340 </item>
+        <item>#ff404d </item>
+        <item>#b3a8ac </item>
+        <item>#b340ff </item>
+    </string-array>
 </resources>
