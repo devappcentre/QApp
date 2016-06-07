@@ -8,10 +8,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import com.ac.qapp.category.CategoryPojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,10 @@ public class DrawerActivity extends AppCompatActivity {
     String[] colorsString;
     Unbinder unbinder;
 
+    @BindArray(R.array.default_colors_dark)
+    String[] colorsDark;
+
+
 
 
 
@@ -51,13 +58,38 @@ public class DrawerActivity extends AppCompatActivity {
 
     private void setUpRecyclerView() {
 
-        List<String> stringList = new ArrayList<>();
-        QuizTypeAdapter quizTypeAdapter = new QuizTypeAdapter(stringList, colorsString);
+        List<CategoryPojo> stringList = new ArrayList<>();
+
+        CategoryPojo categoryPojo1 = new CategoryPojo();
+        categoryPojo1.categoryName = "Sport";
+
+        CategoryPojo categoryPojo2 = new CategoryPojo();
+        categoryPojo2.categoryName = "goT";
+
+        CategoryPojo categoryPojo3 = new CategoryPojo();
+        categoryPojo3.categoryName = "Bollywood";
+
+        CategoryPojo categoryPojo4 = new CategoryPojo();
+        categoryPojo4.categoryName = "Webmyne";
+
+        CategoryPojo categoryPojo5 = new CategoryPojo();
+        categoryPojo5.categoryName = "Us";
+
+        stringList.add(categoryPojo1);
+        stringList.add(categoryPojo2);
+        stringList.add(categoryPojo3);
+        stringList.add(categoryPojo4);
+        stringList.add(categoryPojo5);
+
+
+        QuizTypeAdapter quizTypeAdapter = new QuizTypeAdapter(stringList, colorsString,colorsDark);
         GridLayoutManager linearLayoutManager = new GridLayoutManager(this, 1);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_recyclerView_padding);
         quizTypeRecyclerView.addItemDecoration(new ItemDecoration(spacingInPixels));
         quizTypeRecyclerView.setHasFixedSize(true);
-        quizTypeRecyclerView.setLayoutManager(linearLayoutManager);
+
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        quizTypeRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         quizTypeRecyclerView.setAdapter(quizTypeAdapter);
         progressBar.setVisibility(View.GONE);
     }

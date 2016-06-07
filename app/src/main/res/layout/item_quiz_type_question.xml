@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="180dp">
 
 
-    <TextView
-        android:background="?android:attr/selectableItemBackground"
-        android:id="@+id/quizTypeNameTextView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_quiz_type_height"
-        android:elevation="@dimen/app_elevation"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgCategory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sport" />
+
+
+        <View
+            android:id="@+id/viewPatti"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></View>
+
+        <TextView
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColor="#aaffffff"
+            android:padding="8dp"
+            android:id="@+id/quizTypeNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="?android:attr/selectableItemBackground"
+            android:elevation="@dimen/app_elevation"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+
+    </FrameLayout>
 
 </android.support.v7.widget.CardView>

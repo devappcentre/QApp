@@ -7,11 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.ac.qapp.category.CategoryPojo;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -22,24 +26,27 @@ import timber.log.Timber;
  */
 public class QuizTypeAdapter extends RecyclerView.Adapter<QuizTypeAdapter.QuizTypeViewHolder> {
 
-    List<String> strings;
+    List<CategoryPojo> categories;
     String[] colors;
+    String[] colorsDark;
     Context context;
     int selectColorPosition = 0;
+    int[] imgs = {R.drawable.sport, R.drawable.a, R.drawable.b,R.drawable.c};
+    int posimg = 0;
 
-    public QuizTypeAdapter(List<String> strings, String[] colorsString) {
+    public QuizTypeAdapter(List<CategoryPojo> categories, String[] colorsString, String[] colorsDark) {
 
-        this.strings = strings;
+        this.categories = categories;
         colors = colorsString;
-
+        this.colorsDark = colorsDark;
     }
 
-    public void setStrings(List<String> strings) {
+    public void setStrings(List<CategoryPojo> strings) {
 
         if (strings == null) {
-            strings = new ArrayList<>();
+            strings = new ArrayList<CategoryPojo>();
         }
-        this.strings = strings;
+        this.categories = strings;
     }
 
     @Override
@@ -56,14 +63,7 @@ public class QuizTypeAdapter extends RecyclerView.Adapter<QuizTypeAdapter.QuizTy
 
     @Override
     public int getItemCount() {
-        return 50;
-    }
-
-    public void setGallery(List<String> strings) {
-        if (this.strings == null) {
-            this.strings = new ArrayList<>();
-        }
-        this.strings = strings;
+        return categories.size();
     }
 
 
@@ -72,28 +72,39 @@ public class QuizTypeAdapter extends RecyclerView.Adapter<QuizTypeAdapter.QuizTy
         @BindView(R.id.quizTypeNameTextView)
         TextView quizTypeNameTextView;
 
+        @BindView(R.id.imgCategory)
+        ImageView imgCategory;
+
+        @BindView(R.id.viewPatti)
+        View viewPatti;
+
+        private View item;
 
         public QuizTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.item = itemView;
 
         }
 
-
         public void setDetails(int position) {
-            quizTypeNameTextView.setText(String.valueOf(position));
+
+            imgCategory.setImageResource(imgs[0]);
+            quizTypeNameTextView.setText(categories.get(position).categoryName);
 
             Timber.d(String.valueOf(position));
 
-            if (selectColorPosition == colors.length) {
+            String color = colors[selectColorPosition];
+            String colorDark = colorsDark[selectColorPosition];
+            quizTypeNameTextView.setBackgroundColor(Color.parseColor(colorDark));
+            viewPatti.setBackgroundColor(Color.parseColor(color));
+
+            if (selectColorPosition == colors.length - 1) {
                 selectColorPosition = 0;
             } else {
-
-                String color = colors[selectColorPosition];
-                quizTypeNameTextView.setBackgroundColor(Color.parseColor(color));
-                selectColorPosition++;
-
+                selectColorPosition = selectColorPosition + 1;
             }
+
 
         }
 

@@ -8,11 +8,22 @@
 
 
     <string-array name="default_colors">
-        <item>#4079ff </item>
-        <item>#ffe940 </item>
-        <item>#ffb340 </item>
-        <item>#ff404d </item>
-        <item>#b3a8ac </item>
-        <item>#b340ff </item>
+        <item>#bb009688 </item>
+        <item>#bb2196F3 </item>
+        <item>#bbffb340 </item>
+        <item>#bbff404d </item>
+        <item>#bbb3a8ac </item>
+        <item>#bbb340ff </item>
     </string-array>
+
+    <string-array name="default_colors_dark">
+        <item>#dd009688 </item>
+        <item>#d12196F3 </item>
+        <item>#d1ffb340 </item>
+        <item>#d1ff404d </item>
+        <item>#d1b3a8ac </item>
+        <item>#d1b340ff </item>
+    </string-array>
+
+
 </resources>
