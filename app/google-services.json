@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "713395129106",
+    "firebase_url": "https://playcentre-fb461.firebaseio.com",
+    "project_id": "playcentre-fb461",
+    "storage_bucket": "playcentre-fb461.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713395129106:android:a21a7e400d3cc438",
+        "android_client_info": {
+          "package_name": "com.ac.qapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713395129106-a1or43uc23pnj5sc18jlr342tb0i6hb5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQO7BCQncsLPp7ROPwE9TaMa6vIfpF0LY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
