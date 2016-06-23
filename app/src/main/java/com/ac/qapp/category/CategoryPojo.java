@@ -5,8 +5,11 @@ package com.ac.qapp.category;
  */
 public class CategoryPojo {
 
-    public String categoryName;
-    public int categoryId;
-    public String categoryImage;
+    public String catgBannerImage;
+    public String catgID;
+    public boolean catgIsActive;
+    public String catgName;
+    public String catgSlogan;
+
 
 }

@@ -72,11 +72,11 @@ public class QuizTypeAdapter extends RecyclerView.Adapter<QuizTypeAdapter.QuizTy
         @BindView(R.id.quizTypeNameTextView)
         TextView quizTypeNameTextView;
 
-        @BindView(R.id.imgCategory)
-        ImageView imgCategory;
-
-        @BindView(R.id.viewPatti)
-        View viewPatti;
+//        @BindView(R.id.imgCategory)
+//        ImageView imgCategory;
+//
+//        @BindView(R.id.viewPatti)
+//        View viewPatti;
 
         private View item;
 
@@ -89,15 +89,15 @@ public class QuizTypeAdapter extends RecyclerView.Adapter<QuizTypeAdapter.QuizTy
 
         public void setDetails(int position) {
 
-            imgCategory.setImageResource(imgs[0]);
-            quizTypeNameTextView.setText(categories.get(position).categoryName);
+            //imgCategory.setImageResource(imgs[0]);
+            quizTypeNameTextView.setText(categories.get(position).catgName);
 
             Timber.d(String.valueOf(position));
 
             String color = colors[selectColorPosition];
             String colorDark = colorsDark[selectColorPosition];
             quizTypeNameTextView.setBackgroundColor(Color.parseColor(colorDark));
-            viewPatti.setBackgroundColor(Color.parseColor(color));
+            //viewPatti.setBackgroundColor(Color.parseColor(color));
 
             if (selectColorPosition == colors.length - 1) {
                 selectColorPosition = 0;

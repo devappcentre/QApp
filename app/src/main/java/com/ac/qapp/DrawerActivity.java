@@ -1,20 +1,43 @@
 package com.ac.qapp;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ac.qapp.category.CategoryPojo;
+import com.ac.qapp.helpers.ComplexPreferences;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.Target;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,93 +63,129 @@ public class DrawerActivity extends AppCompatActivity {
 
     @BindArray(R.array.default_colors_dark)
     String[] colorsDark;
+    private DatabaseReference mFirebaseDatabaseReference;
+    private GridLayoutManager mLinearLayoutManager;
+    int defaultt = 0x000000;
 
+    private FirebaseRecyclerAdapter<CategoryPojo, CategoryViewHolder>
+            mFirebaseAdapter;
+
+    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
+
+
+        public TextView txtChatText;
+        public ImageView imgCatgory;
+        public CardView parentCategory;
+
+
+        public CategoryViewHolder(View v) {
+            super(v);
+            txtChatText = (TextView) itemView.findViewById(R.id.quizTypeNameTextView);
+            imgCatgory = (ImageView) itemView.findViewById(R.id.imgCatgory);
+            parentCategory = (CardView) itemView.findViewById(R.id.parentCategory);
+
+        }
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawer);
+
+        setContentView(R.layout.content_drawer);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(getResources().getColor(android.R.color.black));
+        }
+
         unbinder = ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setUpDrawer(toolbar);
-        setUpRecyclerView();
+        mLinearLayoutManager = new GridLayoutManager(this, 2);
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Categories");
+        fetchCategories();
+
     }
 
-    private void setUpRecyclerView() {
+    private void fetchCategories() {
 
-        List<CategoryPojo> stringList = new ArrayList<>();
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<CategoryPojo,
+                CategoryViewHolder>(
+                CategoryPojo.class,
+                R.layout.item_quiz_type_question,
+                CategoryViewHolder.class,
+                mFirebaseDatabaseReference) {
 
-        CategoryPojo categoryPojo1 = new CategoryPojo();
-        categoryPojo1.categoryName = "Sport";
-
-        CategoryPojo categoryPojo2 = new CategoryPojo();
-        categoryPojo2.categoryName = "goT";
-
-        CategoryPojo categoryPojo3 = new CategoryPojo();
-        categoryPojo3.categoryName = "Bollywood";
-
-        CategoryPojo categoryPojo4 = new CategoryPojo();
-        categoryPojo4.categoryName = "Webmyne";
-
-        CategoryPojo categoryPojo5 = new CategoryPojo();
-        categoryPojo5.categoryName = "Us";
-
-        stringList.add(categoryPojo1);
-        stringList.add(categoryPojo2);
-        stringList.add(categoryPojo3);
-        stringList.add(categoryPojo4);
-        stringList.add(categoryPojo5);
-
-
-        QuizTypeAdapter quizTypeAdapter = new QuizTypeAdapter(stringList, colorsString,colorsDark);
-        GridLayoutManager linearLayoutManager = new GridLayoutManager(this, 1);
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.item_recyclerView_padding);
-        quizTypeRecyclerView.addItemDecoration(new ItemDecoration(spacingInPixels));
-        quizTypeRecyclerView.setHasFixedSize(true);
-
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-        quizTypeRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-        quizTypeRecyclerView.setAdapter(quizTypeAdapter);
-        progressBar.setVisibility(View.GONE);
-    }
-
-    private void setUpDrawer(Toolbar toolbar) {
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                int id = item.getItemId();
-
-                if (id == R.id.nav_rateApp) {
-
+            protected void populateViewHolder(final CategoryViewHolder viewHolder,
+                                              final CategoryPojo friendlyMessage, int position) {
+                if (progressBar.isShown()) {
+                    progressBar.setVisibility(View.GONE);
                 }
+                viewHolder.txtChatText.setText(friendlyMessage.catgName);
 
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
+                Glide.with(DrawerActivity.this).load(friendlyMessage.catgBannerImage).asBitmap().into(new BitmapImageViewTarget(viewHolder.imgCatgory) {
+                    @Override
+                    public void onResourceReady(Bitmap drawable, GlideAnimation anim) {
+                        super.onResourceReady(drawable, anim);
+                        if (drawable != null && !drawable.isRecycled()) {
+                            Palette palette = Palette.from(drawable).generate();
+
+                            int vibrant = palette.getVibrantColor(defaultt);
+                            int vibrantLight = palette.getLightVibrantColor(defaultt);
+                            int vibrantDark = palette.getDarkVibrantColor(defaultt);
+                            int muted = palette.getMutedColor(defaultt);
+                            int mutedLight = palette.getLightMutedColor(defaultt);
+                            int mutedDark = palette.getDarkMutedColor(defaultt);
+
+                            viewHolder.txtChatText.setBackgroundColor(vibrantLight);
+                            viewHolder.txtChatText.setTextColor(vibrantDark);
+                        }
+
+                    }
+                });
+
+                viewHolder.parentCategory.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(DrawerActivity.this, friendlyMessage.catgName, Toast.LENGTH_SHORT).show();
+                        ComplexPreferences comp = ComplexPreferences.getComplexPreferences(DrawerActivity.this, "user", MODE_PRIVATE);
+                        comp.putObject("selected_cat", friendlyMessage);
+                        comp.commit();
+
+                        Intent iSubCategory = new Intent(DrawerActivity.this, SubCategoryActivity.class);
+                        startActivity(iSubCategory);
+                    }
+                });
+
             }
+
+        };
+
+        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                int friendlyMessageCount = mFirebaseAdapter.getItemCount();
+                int lastVisiblePosition =
+                        mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+                // If the recycler view is initially being loaded or the
+                // user is at the bottom of the list, scroll to the bottom
+                // of the list to show the newly added message.
+                if (lastVisiblePosition == -1 ||
+                        (positionStart >= (friendlyMessageCount - 1) &&
+                                lastVisiblePosition == (positionStart - 1))) {
+                    quizTypeRecyclerView.scrollToPosition(positionStart);
+                }
+            }
+
         });
+        quizTypeRecyclerView.setLayoutManager(mLinearLayoutManager);
+        quizTypeRecyclerView.setAdapter(mFirebaseAdapter);
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-
-    }
 
     @Override
     protected void onDestroy() {
